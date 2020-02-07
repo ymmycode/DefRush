@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class Pathfinder : MonoBehaviour
 {
+    [SerializeField] Waypoint startPoint, endPoint; // for deciding start and end point
     Dictionary<Vector2Int, Waypoint> grid = new Dictionary<Vector2Int, Waypoint>(); //dont add same coordinates
 
 
@@ -12,6 +13,13 @@ public class Pathfinder : MonoBehaviour
     void Start()
     {
         LoadBlocks();
+        ColorStartAndPoint();
+    }
+
+    private void ColorStartAndPoint()
+    {
+        startPoint.SetTopColor(Color.green);
+        endPoint.SetTopColor(Color.red);
     }
 
     private void LoadBlocks()
