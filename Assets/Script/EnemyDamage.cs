@@ -5,26 +5,34 @@ using UnityEngine;
 public class EnemyDamage : MonoBehaviour
 {
     [SerializeField] int hitPoint = 3;
+    [SerializeField] ParticleSystem hitParticles;
+    [SerializeField] ParticleSystem explodeParticles;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        if (explodeParticles.isPlaying){explodeParticles.Stop();}
     }
 
     private void OnParticleCollision(GameObject other)
     {
+        if (hitParticles.isPlaying){hitParticles.Stop();}
+        hitParticles.Play();
         ProccesHitPoints();
     }
 
     private void ProccesHitPoints()
     {
-        hitPoint--;// hitpoint = hitpoint - 1
-        if (hitPoint < 1)//if 0
+        hitPoint--;
+        if (hitPoint <= 0)
         {
-            Destroy(gameObject); //kill Enemy
+            explodeParticles.Play();
+            Invoke("DestroyEnemy", 0.6f);
         }
+    }
 
-        //TODO particle when dying(1) and explode praticle
+    private void DestroyEnemy()
+    {
+        Destroy(gameObject);
     }
 }
