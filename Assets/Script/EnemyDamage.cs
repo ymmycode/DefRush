@@ -7,6 +7,7 @@ public class EnemyDamage : MonoBehaviour
     [SerializeField] int hitPoint = 3;
     [SerializeField] ParticleSystem hitParticles;
     [SerializeField] ParticleSystem explodeParticles;
+    [SerializeField] AudioClip[] sfx;
 
     // Start is called before the first frame update
     void Start()
@@ -18,6 +19,7 @@ public class EnemyDamage : MonoBehaviour
     {
         if (hitParticles.isPlaying){hitParticles.Stop();}
         hitParticles.Play();
+        GetComponent<AudioSource>().PlayOneShot(sfx[0]);
         ProccesHitPoints();
     }
 
@@ -26,13 +28,17 @@ public class EnemyDamage : MonoBehaviour
         hitPoint--;
         if (hitPoint <= 0)
         {
-            explodeParticles.Play();
-            Invoke("DestroyEnemy", 0.6f);
+            KillEnemy();
         }
     }
 
-    private void DestroyEnemy()
+    private void KillEnemy()
     {
-        Destroy(gameObject);
+        GetComponent<AudioSource>().PlayOneShot(sfx[1]);
+        FindObjectOfType<EnemySpawner>().score += 10;
+        GetComponent<EnemyMovement>().enemyBody.SetActive(false);
+        explodeParticles.Play();
+        float secDelay = explodeParticles.main.duration;
+        Destroy(gameObject, secDelay);
     }
 }

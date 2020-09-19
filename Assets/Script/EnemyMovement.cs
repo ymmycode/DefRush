@@ -5,6 +5,8 @@ using UnityEngine;
 public class EnemyMovement : MonoBehaviour
 {
     [SerializeField] float enemyMovementSpeed = 1f;
+    [SerializeField] ParticleSystem selfDestruct;
+    public GameObject enemyBody;
 
     // Start is called before the first frame update
     void Start()
@@ -21,6 +23,17 @@ public class EnemyMovement : MonoBehaviour
            transform.position = waypoint.transform.position; //make enemy position follow the waypoint object
             yield return new WaitForSeconds(enemyMovementSpeed); // hold 1 sec
         }
+
+        //selfdestruct
+        SelfDestruct();
+    }
+    
+    private void SelfDestruct()
+    {
+        enemyBody.SetActive(false);
+        selfDestruct.Play();
+        float secDelay = selfDestruct.main.duration;
+        Destroy(gameObject, secDelay);
     }
 
     // Update is called once per frame
